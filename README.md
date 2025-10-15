@@ -1,9 +1,48 @@
 Netty-socketio Overview
-===
-This project is an open-source Java implementation of [Socket.IO](http://socket.io/) server. Based on [Netty](http://netty.io/) server framework.  
+=============================
+This project is a fork of [netty-socketio](https://github.com/mrniko/netty-socketio), which is no longer actively maintained. The fork aims to keep the library up-to-date with the latest dependencies and improvements, ensuring continued support and functionality for users.
+
+ - There is a branch for merging the latest changes from the original repository: `merge-to-source-master`, and an Open PR: https://github.com/mrniko/netty-socketio/pull/1057
+ - The main development branch is `main`, which contains the latest features and fixes.
+ - The main stream version has a separate branch, for example `3.x`
+ - This project is an open-source Java implementation of [Socket.IO](http://socket.io/) server. Based on [Netty](http://netty.io/) server framework.  
 
 Licensed under the Apache License 2.0.
 
+Migration from original netty-socketio
+================================
+
+3.0.0 is the same as 2.0.13 with split modules, integration tests, and some CI/CD improvements. Replace old dependency:
+
+```xml
+<dependency>
+  <groupId>com.corundumstudio.socketio</groupId>
+  <artifactId>netty-socketio</artifactId>
+  <version>2.0.13</version>
+</dependency>
+```
+
+with new one:
+```xml
+<dependency>
+  <groupId>io.github.neatguycoding</groupId>
+  <artifactId>netty-socketio-core</artifactId>
+  <version>LATEST-VERSION</version>
+</dependency>
+```
+
+If you use Spring integration (Just one class: `SpringAnnotationScanner`), you should use the new dependency:
+```xml
+<dependency>
+  <groupId>io.github.neatguycoding</groupId>
+  <artifactId>netty-socketio-spring</artifactId>
+  <version>LATEST-VERSION</version>
+</dependency>
+```
+
+How to use
+================================
+Please refer to netty-socketio-examples module: [netty-socketio-examples](netty-socketio-examples)
 
 Features
 ================================
@@ -23,28 +62,6 @@ Features
 
 JAR is compatible with Java 8 but needs Java 11+ for building the module-info.
 
-### Maven 
-
-#### Core Module
-Include the following to your dependency list for core functionality:
-```xml
-    <dependency>
-     <groupId>io.github.neatguycoding</groupId>
-     <artifactId>netty-socketio-core</artifactId>
-     <version>3.0.0-SNAPSHOT</version>
-    </dependency>
-```
-
-#### Spring Integration
-For Spring integration, include the spring modules:
-```xml
-    <dependency>
-     <groupId>io.github.neatguycoding</groupId>
-     <artifactId>netty-socketio-spring</artifactId>
-     <version>3.0.0-SNAPSHOT</version>
-    </dependency>
-```
-
 Performance
 ================================
 
@@ -58,6 +75,8 @@ CPU 10%, Memory 15%
 Customer feedback in __2014__:  
 "To stress test the solution we run 30 000 simultaneous websocket clients and managed to peak at total of about 140 000 messages per second with less than 1 second average delay." (c) Viktor Endersz - Kambi Sports Solutions
 
+For more details, please refer to daily smoke tests results: [PERFORMANCE_REPORT.md](netty-socketio-smoke-test/PERFORMANCE_REPORT.md)
+
 Projects using netty-socketio
 ================================
 Multiplayer Orchestra: [multiplayer-orchestra.com](https://multiplayer-orchestra.com/)  
@@ -67,7 +86,18 @@ ARSnova: [arsnova.eu](https://arsnova.eu)
 
 Recent Releases
 ================================
-#### Please Note: trunk is current development branch.
+Refer to: https://mvnrepository.com/artifact/io.github.neatguycoding/netty-socketio
+
+#### 15-Oct-2025 - version 3.0.0 released
+Feature - Split to core, spring, quarkus, and micronaut modules
+Feature - add TestContainers Based tests
+Feature - add daily smoke tests
+Feature - add GitHub Actions CI/CD
+
+
+Original netty-socketio project releases: 
+================================
+Refer to: https://mvnrepository.com/artifact/com.corundumstudio.socketio/netty-socketio
 
 #### 19-Mar-2025 - version 2.0.13 released
 
