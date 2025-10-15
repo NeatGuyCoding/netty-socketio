@@ -564,13 +564,4 @@
       </plugin>
     </plugins>
   </build>
-
-
-  <server>
-    <id>${server}</id>
-    <username>iqOspp</username>
-    <password>JgUURXu2jwut00w5uRNB7UiIckPkxgYyc</password>
-  </server>
-
-
 </project>
