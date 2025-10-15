@@ -89,10 +89,10 @@ Recent Releases
 Refer to: https://mvnrepository.com/artifact/io.github.neatguycoding/netty-socketio
 
 #### 15-Oct-2025 - version 3.0.0 released
-Feature - Split to core, spring, quarkus, and micronaut modules
-Feature - add TestContainers Based tests
-Feature - add daily smoke tests
-Feature - add GitHub Actions CI/CD
+ - Feature - Split to core, spring, quarkus, and micronaut modules
+ - Feature - add TestContainers Based tests
+ - Feature - add daily smoke tests
+ - Feature - add GitHub Actions CI/CD
 
 
 Original netty-socketio project releases: 
