@@ -10,6 +10,12 @@
   <inceptionYear>2012</inceptionYear>
   <url>https://github.com/NeatGuyCoding/netty-socketio</url>
 
+  <scm>
+    <url>https://github.com/NeatGuyCoding/netty-socketio</url>
+    <connection>https://github.com/NeatGuyCoding/netty-socketio.git</connection>
+    <tag>HEAD</tag>
+  </scm>
+
   <modules>
     <module>netty-socketio-core</module>
     <module>netty-socketio-spring</module>
