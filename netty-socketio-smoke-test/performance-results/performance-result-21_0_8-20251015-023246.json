@@ -3,7 +3,7 @@
   "javaVersion" : "21.0.8",
   "jvmArgs" : "-Xms256m -Xmx256m -XX:+UseG1GC -XX:+AlwaysPreTouch",
   "gitBranch" : "master",
-  "version" : "2.0.14-SNAPSHOT",
+  "version" : "3.0.0-SNAPSHOT",
   "operatingSystem" : "Linux 6.11.0-1018-azure",
   "architecture" : "amd64",
   "cpuCount" : 4,
