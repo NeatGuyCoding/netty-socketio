@@ -31,7 +31,7 @@ Include the following to your dependency list for core functionality:
     <dependency>
      <groupId>io.github.neatguycoding</groupId>
      <artifactId>netty-socketio-core</artifactId>
-     <version>3.0.0</version>
+     <version>3.0.0-alpha</version>
     </dependency>
 ```
 
@@ -41,7 +41,7 @@ For Spring integration, include the spring modules:
     <dependency>
      <groupId>io.github.neatguycoding</groupId>
      <artifactId>netty-socketio-spring</artifactId>
-     <version>3.0.0</version>
+     <version>3.0.0-alpha</version>
     </dependency>
 ```
 
