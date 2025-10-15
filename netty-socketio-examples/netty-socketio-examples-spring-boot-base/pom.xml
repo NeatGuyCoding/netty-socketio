@@ -9,7 +9,7 @@
     <version>3.0.0</version>
   </parent>
 
-  <groupId>com.corundumstudio.socketio</groupId>
+  <groupId>io.github.neatguycoding</groupId>
   <artifactId>netty-socketio-examples-spring-boot-base</artifactId>
   <version>2.0.14-SNAPSHOT</version>
   <description>NettySocketIO Spring Boot Examples</description>
@@ -20,7 +20,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.corundumstudio.socketio</groupId>
+      <groupId>io.github.neatguycoding</groupId>
       <artifactId>netty-socketio-spring-boot-starter</artifactId>
       <version>2.0.14-SNAPSHOT</version>
     </dependency>

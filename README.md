@@ -29,7 +29,7 @@ JAR is compatible with Java 8 but needs Java 11+ for building the module-info.
 Include the following to your dependency list for core functionality:
 ```xml
     <dependency>
-     <groupId>com.corundumstudio.socketio</groupId>
+     <groupId>io.github.neatguycoding</groupId>
      <artifactId>netty-socketio-core</artifactId>
      <version>2.0.14-SNAPSHOT</version>
     </dependency>
@@ -39,7 +39,7 @@ Include the following to your dependency list for core functionality:
 For Spring integration, include the spring modules:
 ```xml
     <dependency>
-     <groupId>com.corundumstudio.socketio</groupId>
+     <groupId>io.github.neatguycoding</groupId>
      <artifactId>netty-socketio-spring</artifactId>
      <version>2.0.14-SNAPSHOT</version>
     </dependency>
