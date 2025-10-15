@@ -11,7 +11,7 @@
 
   <groupId>io.github.neatguycoding</groupId>
   <artifactId>netty-socketio-examples-spring-boot-base</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0</version>
   <description>NettySocketIO Spring Boot Examples</description>
 
   <properties>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>io.github.neatguycoding</groupId>
       <artifactId>netty-socketio-spring-boot-starter</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
