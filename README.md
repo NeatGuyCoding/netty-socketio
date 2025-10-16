@@ -55,7 +55,9 @@ Features
 * Supports client store ([Redisson](https://redisson.pro), Hazelcast, Memory)  
 * Supports distributed broadcast across netty-socketio nodes ([Redisson](https://redisson.pro), Hazelcast)  
 * Supports OSGi  
-* Supports Spring  
+* Supports Spring
+* Supports Quarkus
+* Supports Micronaut
 * Contains Java module info for JPMS. 
 * Lock-free and thread-safe implementation  
 * Declarative handler configuration via annotations  
