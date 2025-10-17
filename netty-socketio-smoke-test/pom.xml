@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.corundumstudio.socketio</groupId>
+    <groupId>io.github.neatguycoding</groupId>
     <artifactId>netty-socketio-parent</artifactId>
-    <version>2.0.14-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>netty-socketio-smoke-test</artifactId>
@@ -19,9 +19,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.corundumstudio.socketio</groupId>
+      <groupId>io.github.neatguycoding</groupId>
       <artifactId>netty-socketio-core</artifactId>
-      <version>2.0.14-SNAPSHOT</version>
+      <version>3.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
@@ -119,6 +119,15 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>3.6.0</version>
         <configuration>
+          <!-- do not check -->
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <!-- do not deploy -->
           <skip>true</skip>
         </configuration>
       </plugin>

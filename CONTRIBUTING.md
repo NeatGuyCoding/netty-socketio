@@ -39,7 +39,7 @@ git clone https://github.com/YOUR_USERNAME/netty-socketio.git
 cd netty-socketio
 
 # Add upstream remote
-git remote add upstream https://github.com/mrniko/netty-socketio.git
+git remote add upstream https://github.com/NeatGuyCoding/netty-socketio.git
 ```
 
 ### 2. Build the Project

@@ -1,19 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.corundumstudio.socketio</groupId>
+  <groupId>io.github.neatguycoding</groupId>
   <artifactId>netty-socketio-parent</artifactId>
-  <version>2.0.14-SNAPSHOT</version>
+  <version>3.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>NettySocketIO</name>
   <description>Socket.IO server implemented on Java</description>
   <inceptionYear>2012</inceptionYear>
-  <url>https://github.com/mrniko/netty-socketio</url>
+  <url>https://github.com/NeatGuyCoding/netty-socketio</url>
 
   <scm>
-    <url>scm:git:git@github.com:mrniko/netty-socketio.git</url>
-    <connection>scm:git:git@github.com:mrniko/netty-socketio.git</connection>
-    <developerConnection>scm:git:git@github.com:mrniko/netty-socketio.git</developerConnection>
+    <url>https://github.com/NeatGuyCoding/netty-socketio</url>
+    <connection>https://github.com/NeatGuyCoding/netty-socketio.git</connection>
     <tag>HEAD</tag>
   </scm>
 
@@ -30,7 +29,6 @@
     <license>
       <name>Apache v2</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-      <distribution>manual</distribution>
     </license>
   </licenses>
 
@@ -45,13 +43,24 @@
       </roles>
       <timezone>+4</timezone>
     </developer>
+    <developer>
+      <id>NeatGuyCoding</id>
+      <name>NeatGuyCoding</name>
+      <roles>
+        <role>Maintainer</role>
+        <role>Developer</role>
+      </roles>
+    </developer>
   </developers>
 
   <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
     <repository>
-      <id>repo1</id>
-      <name>Release</name>
-      <url>file://C:/123</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
 
@@ -111,21 +120,36 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.2.4</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
                 <phase>verify</phase>
                 <goals>
-<!--                  <goal>sign</goal>-->
+                  <goal>sign</goal>
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <gpgArguments>
+                <argument>--pinentry-mode</argument>
+                <argument>loopback</argument>
+              </gpgArguments>
+            </configuration>
           </plugin>
           <plugin>
             <groupId>net.ju-n.maven.plugins</groupId>
             <artifactId>checksum-maven-plugin</artifactId>
             <version>1.4</version>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.4.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>ossrh</publishingServerId>
+              <tokenAuth>true</tokenAuth>
+            </configuration>
           </plugin>
         </plugins>
       </build>
@@ -307,19 +331,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.7.0</version>
-        <extensions>true</extensions>
-        <configuration>
-          <serverId>ossrepo</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-          <stagingProgressTimeoutMinutes>15</stagingProgressTimeoutMinutes>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -546,5 +557,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>

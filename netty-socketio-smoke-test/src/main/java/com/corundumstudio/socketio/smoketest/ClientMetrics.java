@@ -15,7 +15,6 @@
  */
 package com.corundumstudio.socketio.smoketest;
 
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.HdrHistogram.Histogram;
