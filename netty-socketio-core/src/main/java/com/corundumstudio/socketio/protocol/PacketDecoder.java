@@ -371,22 +371,57 @@ public class PacketDecoder {
     }
 
     private Packet addAttachment(ClientHead head, ByteBuf frame, Packet binaryPacket) throws IOException {
+        if (log.isDebugEnabled()) {
+            log.debug("Processing binary attachment, sessionId: {}, frameSize: {}, attachmentsCount: {}", 
+                     head.getSessionId(), frame.readableBytes(), binaryPacket.getAttachments().size());
+        }
+        
         ByteBuf attachBuf = Base64.encode(frame);
         binaryPacket.addAttachment(Unpooled.copiedBuffer(attachBuf));
         attachBuf.release();
         frame.skipBytes(frame.readableBytes());
 
         if (binaryPacket.isAttachmentsLoaded()) {
+            if (log.isDebugEnabled()) {
+                log.debug("All attachments loaded, processing {} attachments for sessionId: {}", 
+                         binaryPacket.getAttachments().size(), head.getSessionId());
+            }
+            
             LinkedList<ByteBuf> slices = new LinkedList<>();
             ByteBuf source = binaryPacket.getDataSource();
+            
+            // Pre-allocate StringBuilder for better performance
+            StringBuilder patternBuilder = new StringBuilder(32);
+            
             for (int i = 0; i < binaryPacket.getAttachments().size(); i++) {
                 ByteBuf attachment = binaryPacket.getAttachments().get(i);
-                ByteBuf scanValue = Unpooled.copiedBuffer("{\"_placeholder\":true,\"num\":" + i + "}", CharsetUtil.UTF_8);
+                
+                // Optimize string building by reusing StringBuilder
+                patternBuilder.setLength(0);
+                patternBuilder.append("{\"_placeholder\":true,\"num\":").append(i).append("}");
+                ByteBuf scanValue = Unpooled.copiedBuffer(patternBuilder.toString(), CharsetUtil.UTF_8);
+                
+                if (log.isTraceEnabled()) {
+                    log.trace("Searching for pattern: {} in source for attachment index: {}, sessionId: {}", 
+                             patternBuilder.toString(), i, head.getSessionId());
+                }
+                
                 int pos = PacketEncoder.find(source, scanValue);
                 if (pos == -1) {
-                    scanValue = Unpooled.copiedBuffer("{\"num\":" + i + ",\"_placeholder\":true}", CharsetUtil.UTF_8);
+                    // Try alternative pattern
+                    patternBuilder.setLength(0);
+                    patternBuilder.append("{\"num\":").append(i).append(",\"_placeholder\":true}");
+                    scanValue = Unpooled.copiedBuffer(patternBuilder.toString(), CharsetUtil.UTF_8);
+                    
+                    if (log.isTraceEnabled()) {
+                        log.trace("Trying alternative pattern: {} for attachment index: {}, sessionId: {}", 
+                                 patternBuilder.toString(), i, head.getSessionId());
+                    }
+                    
                     pos = PacketEncoder.find(source, scanValue);
                     if (pos == -1) {
+                        log.error("Can't find attachment placeholder for index: {} in packet source, sessionId: {}", 
+                                 i, head.getSessionId());
                         throw new IllegalStateException("Can't find attachment by index: " + i + " in packet source");
                     }
                 }
@@ -398,14 +433,31 @@ public class PacketDecoder {
                 slices.add(quotes);
 
                 source.readerIndex(pos + scanValue.readableBytes());
+                scanValue.release(); // Release the temporary ByteBuf
+                
+                if (log.isTraceEnabled()) {
+                    log.trace("Processed attachment index: {}, pos: {}, sessionId: {}", 
+                             i, pos, head.getSessionId());
+                }
             }
             slices.add(source.slice());
 
             ByteBuf compositeBuf = Unpooled.wrappedBuffer(slices.toArray(new ByteBuf[0]));
             parseBody(head, compositeBuf, binaryPacket);
             head.setLastBinaryPacket(null);
+            
+            if (log.isDebugEnabled()) {
+                log.debug("Successfully processed all {} attachments for sessionId: {}", 
+                         binaryPacket.getAttachments().size(), head.getSessionId());
+            }
+            
             return binaryPacket;
         }
+        
+        if (log.isDebugEnabled()) {
+            log.debug("Attachments not fully loaded yet for sessionId: {}", head.getSessionId());
+        }
+        
         return new Packet(PacketType.MESSAGE, head.getEngineIOVersion());
     }
 

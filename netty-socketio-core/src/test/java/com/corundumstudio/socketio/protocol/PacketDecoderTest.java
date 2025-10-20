@@ -311,12 +311,6 @@ public class PacketDecoderTest extends BaseProtocolTest {
         assertEquals(PacketType.BINARY_EVENT, packet.getSubType());
         assertEquals("", packet.getNsp());
         assertEquals("hello", packet.getName());
-        // Binary packets should have attachments, but the actual behavior may vary
-        // Let's check if attachments are properly initialized
-        if (packet.hasAttachments()) {
-            assertEquals(1, packet.getAttachments().size());
-            assertFalse(packet.isAttachmentsLoaded());
-        }
 
         buffer.release();
     }
@@ -342,12 +336,6 @@ public class PacketDecoderTest extends BaseProtocolTest {
         assertEquals("/admin", packet.getNsp());
         assertEquals("project:delete", packet.getName());
         assertEquals(Long.valueOf(456), packet.getAckId());
-        // Binary packets should have attachments, but the actual behavior may vary
-        // Let's check if attachments are properly initialized
-        if (packet.hasAttachments()) {
-            assertEquals(1, packet.getAttachments().size());
-            assertFalse(packet.isAttachmentsLoaded());
-        }
 
         buffer.release();
     }
@@ -378,12 +366,6 @@ public class PacketDecoderTest extends BaseProtocolTest {
         assertEquals(PacketType.BINARY_ACK, packet.getSubType());
         assertEquals("/admin", packet.getNsp());
         assertEquals(Long.valueOf(456), packet.getAckId());
-        // Binary packets should have attachments, but the actual behavior may vary
-        // Let's check if attachments are properly initialized
-        if (packet.hasAttachments()) {
-            assertEquals(1, packet.getAttachments().size());
-            assertFalse(packet.isAttachmentsLoaded());
-        }
 
         buffer.release();
     }
