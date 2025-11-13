@@ -90,6 +90,12 @@ Recent Releases
 ================================
 Refer to: https://mvnrepository.com/artifact/io.github.neatguycoding/netty-socketio
 
+#### 11-Nov-2025 - version 3.0.1 released
+ - Feature fix todo refactor decode by @NeatGuyCoding in #28
+ - improve long to bytes with benchmarks by @NeatGuyCoding in #29
+ - modify long to bytes with benchmarks by @NeatGuyCoding in #30
+ - Add zero copy version of pre-process json decoder by @NeatGuyCoding in #31
+
 #### 15-Oct-2025 - version 3.0.0 released
  - Feature - Split to core, spring, quarkus, and micronaut modules
  - Feature - add TestContainers Based tests
