@@ -22,6 +22,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.netty.channel.*;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollIoHandler;
+import io.netty.channel.kqueue.KQueue;
+import io.netty.channel.kqueue.KQueueIoHandler;
+import io.netty.channel.kqueue.KQueueServerSocketChannel;
+import io.netty.channel.nio.NioIoHandler;
+import io.netty.channel.uring.IoUring;
+import io.netty.channel.uring.IoUringIoHandler;
+import io.netty.channel.uring.IoUringServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,15 +47,7 @@ import com.corundumstudio.socketio.namespace.Namespace;
 import com.corundumstudio.socketio.namespace.NamespacesHub;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.DefaultEventLoop;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.FixedRecvByteBufAllocator;
-import io.netty.channel.ServerChannel;
-import io.netty.channel.WriteBufferWaterMark;
-import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
@@ -113,9 +115,9 @@ public class SocketIOServer implements ClientListeners {
 
     public BroadcastOperations getBroadcastOperations() {
         Collection<SocketIONamespace> namespaces = namespacesHub.getAllNamespaces();
-        List<BroadcastOperations> list = new ArrayList<BroadcastOperations>();
+        List<BroadcastOperations> list = new ArrayList<>();
         BroadcastOperations broadcast = null;
-        if (namespaces != null && namespaces.size() > 0) {
+        if (namespaces != null && !namespaces.isEmpty()) {
             for (SocketIONamespace n : namespaces) {
                 broadcast = n.getBroadcastOperations();
                 list.add(broadcast);
@@ -135,7 +137,7 @@ public class SocketIOServer implements ClientListeners {
         Collection<SocketIONamespace> namespaces = namespacesHub.getAllNamespaces();
         List<BroadcastOperations> list = new ArrayList<BroadcastOperations>();
         BroadcastOperations broadcast = null;
-        if (namespaces != null && namespaces.size() > 0) {
+        if (namespaces != null && !namespaces.isEmpty()) {
             for (SocketIONamespace n : namespaces) {
                 for (String room : rooms) {
                     broadcast = n.getRoomOperations(room);
@@ -177,10 +179,20 @@ public class SocketIOServer implements ClientListeners {
 
             pipelineFactory.start(configCopy, namespacesHub);
 
+            configCopy.validate();
+
             Class<? extends ServerChannel> channelClass = NioServerSocketChannel.class;
-            if (configCopy.isUseLinuxNativeEpoll()) {
+
+            if (configCopy.isUseLinuxNativeIoUring() && IoUring.isAvailable()) {
+                channelClass = IoUringServerSocketChannel.class;
+            } else if (configCopy.isUseLinuxNativeEpoll() && Epoll.isAvailable()) {
                 channelClass = EpollServerSocketChannel.class;
+            } else if (configCopy.isUseUnixNativeKqueue() && KQueue.isAvailable()) {
+                channelClass = KQueueServerSocketChannel.class;
+            } else {
+                log.warn("No selected native transport is available. Falling back to NIO");
             }
+
 
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
@@ -237,13 +249,22 @@ public class SocketIOServer implements ClientListeners {
     }
 
     protected void initGroups() {
-        if (configCopy.isUseLinuxNativeEpoll()) {
-            bossGroup = new EpollEventLoopGroup(configCopy.getBossThreads());
-            workerGroup = new EpollEventLoopGroup(configCopy.getWorkerThreads());
-        } else {
-            bossGroup = new NioEventLoopGroup(configCopy.getBossThreads());
-            workerGroup = new NioEventLoopGroup(configCopy.getWorkerThreads());
+
+        configCopy.validate();
+
+        IoHandlerFactory ioHandler = NioIoHandler.newFactory(); // default
+
+        if (configCopy.isUseLinuxNativeIoUring() && IoUring.isAvailable()) {
+            ioHandler = IoUringIoHandler.newFactory();
+        } else if (configCopy.isUseLinuxNativeEpoll() && Epoll.isAvailable()) {
+            ioHandler = EpollIoHandler.newFactory();
+        } else if (configCopy.isUseUnixNativeKqueue() && KQueue.isAvailable()) {
+            ioHandler = KQueueIoHandler.newFactory();
         }
+
+        bossGroup   = new MultiThreadIoEventLoopGroup(configCopy.getBossThreads(), ioHandler);
+        workerGroup = new MultiThreadIoEventLoopGroup(configCopy.getWorkerThreads(), ioHandler);
+
     }
 
     /**
