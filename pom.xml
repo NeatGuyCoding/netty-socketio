@@ -68,7 +68,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <testcontainers.version>1.21.3</testcontainers.version>
-    <netty.version>4.1.119.Final</netty.version>
+    <netty.version>4.2.7.Final</netty.version>
     <jmockit.version>1.49</jmockit.version>
     <byte-buddy.version>1.14.13</byte-buddy.version>
     <junit.version>5.10.1</junit.version>
@@ -176,8 +176,46 @@
           <classifier>linux-aarch_64</classifier>
           <version>${netty.version}</version>
         </dependency>
+          <dependency>
+              <groupId>io.netty</groupId>
+              <artifactId>netty-transport-native-io_uring</artifactId>
+              <classifier>linux-x86_64</classifier>
+              <version>${netty.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>io.netty</groupId>
+              <artifactId>netty-transport-native-io_uring</artifactId>
+              <classifier>linux-aarch_64</classifier>
+              <version>${netty.version}</version>
+          </dependency>
       </dependencies>
     </profile>
+      <profile>
+          <!-- Dynamically depend on kqueue only on macOS -->
+          <id>macOS</id>
+          <activation>
+              <os>
+                  <name>Mac OS X</name>
+                  <family>mac</family>
+              </os>
+          </activation>
+
+          <dependencies>
+              <dependency>
+                  <groupId>io.netty</groupId>
+                  <artifactId>netty-transport-native-kqueue</artifactId>
+                  <classifier>osx-x86_64</classifier>
+                  <version>${netty.version}</version>
+              </dependency>
+              <dependency>
+                  <groupId>io.netty</groupId>
+                  <artifactId>netty-transport-native-kqueue</artifactId>
+                  <classifier>osx-aarch_64</classifier>
+                  <version>${netty.version}</version>
+              </dependency>
+          </dependencies>
+      </profile>
+
   </profiles>
 
   <dependencyManagement>
@@ -225,6 +263,18 @@
         <version>${netty.version}</version>
         <scope>provided</scope>
       </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport-native-io_uring</artifactId>
+            <version>${netty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport-native-kqueue</artifactId>
+            <version>${netty.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
       <dependency>
         <groupId>org.slf4j</groupId>
