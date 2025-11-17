@@ -18,11 +18,11 @@ module netty.socketio.core {
   requires com.fasterxml.jackson.databind;
 
   requires static com.hazelcast.core;
-  requires static com.hazelcast.client;
-
   requires static redisson;
 
   requires static io.netty.transport.classes.epoll;
+  requires static io.netty.transport.classes.io_uring;
+  requires static io.netty.transport.classes.kqueue;
   requires io.netty.codec;
   requires io.netty.transport;
   requires io.netty.buffer;
@@ -30,6 +30,5 @@ module netty.socketio.core {
   requires io.netty.handler;
   requires io.netty.codec.http;
   requires org.slf4j;
-    requires io.netty.transport.classes.io_uring;
-    requires io.netty.transport.classes.kqueue;
+
 }
